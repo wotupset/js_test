@@ -111,14 +111,18 @@ function view($a,$b,$c,$d){
 	if(mysql_error()){die(mysql_error());}//有錯誤就停止 //mysql_error()
 	$max = mysql_num_rows($result);//取得資料庫總筆數
 	$cc=0;$str_tmp='';
-	$str_tmp.=$title."\t".$max."\t".$row['ymd']."\n";
+	$str_tmp.=$title."\t".$max."\t".$ymd."\n";
 	while($row = mysql_fetch_array($result)){//將範圍內的資料列出
-		$str_tmp.= $cc;
-		$str_tmp.= "\t";
 		$str_tmp.= $row['date'];
+		$str_tmp.= "\t";
+		$str_tmp.= $row['ymd'];
+		$str_tmp.= "\t";
+		$str_tmp.= $cc;
+		$str_tmp.= "\n";
 		$str_tmp.= "\t";
 		$str_tmp.= $row['user_ip'];
 		$str_tmp.= "\n";
+		$str_tmp.= "\t";
 		$str_tmp.= $row['user_from'];
 		$str_tmp.= "\n";
 		$cc=$cc+1;
@@ -143,8 +147,6 @@ function rec($a,$b,$c,$d){
 	// ^^加在mysql_select_db之前
 	$tmp=mysql_select_db($mysql_dbnm, $con);//選擇資料庫
 	if(mysql_error()){die("");}else{}//讀取失敗則停止 //mysql_error()
-	//$sql = "ALTER TABLE `$t2` CHANGE `text` `text` varchar(20000) NOT NULL";// 
-	//mysql_query($sql); 
 	//
 	//$tmp=mysql_query("DROP TABLE IF EXISTS `$title`",$con);
 	//if(mysql_error()){die(mysql_error());}//有錯誤就停止
@@ -164,6 +166,11 @@ function rec($a,$b,$c,$d){
 		if(mysql_error()){die("");}else{}//讀取失敗則停止
 	}
 	//**********連結資料庫
+	//舊版格式相容
+	if(0){
+		$sql = "ALTER TABLE `$title` CHANGE `user_ip2` `ymd` varchar(255)";// 
+		$result = mysql_query($sql); 
+	}
 	$date=date("Y-m-d H:i:s",$time);
 	$ymd=date("ymd",$time);
 	$user_ip = ($HTTP_X_FORWARDED_FOR)?$_SERVER[HTTP_X_FORWARDED_FOR]:$_SERVER[REMOTE_ADDR];
