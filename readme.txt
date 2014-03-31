@@ -1,0 +1,2 @@
+UTF8
+mysql練習
